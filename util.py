@@ -29,3 +29,10 @@ def clean_df(df):
     df = df[df['text'].str.len() >= 10]
     df['name_ru'] = df['name_ru'].fillna('нет')
     return df
+
+def copy_data_to_device(data, device):
+    if torch.is_tensor(data):
+        return data.to(device)
+    elif isinstance(data, (list, tuple)):
+        return [copy_data_to_device(elem, device) for elem in data]
+    raise ValueError('Недопустимый тип данных {}'.format(type(data)))
